@@ -110,5 +110,3 @@ def main():
         
 
 main()
-print('#')
-print(board.count(' '))

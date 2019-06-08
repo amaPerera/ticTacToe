@@ -6,6 +6,7 @@ Created on Fri May 24 21:54:31 2019
 
 Tic Tac Toe Game in Python
 """
+
 #creating the board
 board = [' ' for x in range(10)]
 
@@ -63,8 +64,55 @@ def playerMove():
             print('Please type a number!')
             
 #Now comes the AI stuff.. :)
+'''
+    If the current step cannot be completed proceed to the next.
+    1. If there is a winning move take it.
+    2. If the player has a possible winning move on their next turn move into that position.
+    3. Take any one of the corners. If more than one is available randomly decide.
+    4. Take the center position.
+    5. Take one of the edges. If more than one is available randomly decide.
+    6. If no move is possible the game is a tie.
+'''          
 def compMove():
-    pass
+    
+    #first identify the available moves using list comprehention and enumerate functions
+    '''
+     #list comprehention - elegant and concise way to create new list from an existing list. 
+        #This consists of an expression followed by for statement inside square brackets and 
+        #optionally contain more for or if statements. An optional if statement can filter out items for the new list
+     #enumerate - loop over a list while keeping track of the index
+    '''
+    possibleMoves = [x for x, letter in enumerate(board) if letter == ' ' and x != 0] #list of possible moves
+    move = 0
+    
+    #now we check whether there is any winning positions among the possibleMoves for the user or the computer and if there is any we will ove to that place
+    for l in ['O', 'X']:
+        for i in possibleMoves:
+            boardTemp = board[:] #This will clone the board if we put bordTemp = board this will create an reference to the board which will make chanes in board when we change boardTemp
+            boardTemp[i] = l
+            if isWinner(boardTemp, l):
+                move = i
+                return move
+            
+    availableCorners =[x for x in possibleMoves if x in [1,3,7,9]]
+    if len(availableCorners) > 0:
+        selectRandom(availableCorners)
+    
+    #If possible move to take the center
+    if 5 in possibleMoves:
+        move = 5
+        return move
+
+    #Take any edge
+    edgesOpen = []
+    for i in possibleMoves:
+        if i in [2,4,6,8]:
+            edgesOpen.append(i)
+    
+    if len(edgesOpen) > 0:
+        move = selectRandom(edgesOpen)
+
+    return move
 
 #selecting a randome position from the given list of positions
 def selectRandom(li):
@@ -99,14 +147,9 @@ def main():
             else:
                 insertLetter('O', move)
                 print('Computer place \'O\' in positon', move)
-                printBoard()
+                printBoard(board)
         else:
             print('You won! Good Job!! :)')
-            break
-    
-    if isBoardFull (board):
-        print('Tie Game!')
-        
-        
+            break   
 
 main()

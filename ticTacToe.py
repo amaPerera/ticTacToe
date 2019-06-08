@@ -93,7 +93,12 @@ def compMove():
             if isWinner(boardTemp, l):
                 move = i
                 return move
-            
+    
+    #If possible move to take the center
+    if 5 in possibleMoves:
+        move = 5
+        return move        
+    
     availableCorners =[x for x in possibleMoves if x in [1,3,7,9]]
     if len(availableCorners) > 0:
         selectRandom(availableCorners)
@@ -150,6 +155,11 @@ def main():
                 printBoard(board)
         else:
             print('You won! Good Job!! :)')
-            break   
+            break
+    
+    if isBoardFull (board):
+        print('Tie Game!')
+        
+        
 
 main()
